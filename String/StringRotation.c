@@ -1,12 +1,24 @@
 #include <stdio.h>
 
+int main()
+{
+    void LeftShift(char* s, int n);
+    void LeftRotateStringOne(char* s, int n, int m);
+    void ReverseString(char* s, int from, int to);
+    void LeftRotateStringTwo(char* s, int n, int m);
+    char s[] = "abcdef";
+    //LeftRotateStringOne(s, strlen(s), 3);
+    LeftRotateStringTwo(s, strlen(s), 3);
+    printf(s);
+    return 0;
+}
+
 /**
- *Method one：Direct Shift
+ * 方法一：蛮力移位 
  * 
- *1.Define a function that moves the first place of the string to the end.
- *2.Calling the function n times ，then can move the n characters at the 
- *  beginning of the string to the end. 
-*/
+ * 1. 定义LeftShift函数，将字符串的首位移到尾部。 
+ * 2. 调用m次LeftShift函数，可使字符串开头的m个字符移到字符串的尾部。 
+ */
 void LeftShift(char* s, int n)
 {
     int i; 
@@ -26,11 +38,28 @@ void LeftRotateString(char* s, int n, int m)
     }
 }
 
-
-int main()
+/**
+ * 方法二：三步反转 
+ * 1.定义ReverseString函数，可将字符串反转。 
+ * 2.将字符串分为需要移动的部分和不需移动的部分，先将两部分各自反转，例如
+ *   abc->cba，def->fed。
+ * 3.将第二步得到的结果整体反转即可实现字符串的反转，例如cbafed->defabc。 
+ */
+void ReverseString(char* s, int from, int to)
 {
-    char s[] = "abcd";
-    LeftRotateString(s, 4, 2);
-    printf(s);
-    return 0;
+    while (from < to)
+    {
+        char t = s[from];  
+        s[from++] = s[to];
+        s[to--] = t;
+    }
+} 
+
+void LeftRotateStringTwo(char* s, int n, int m)
+{
+    // 若要向左移动大于n为，则与%n等价
+    m %= n; 
+    ReverseString(s, 0, m - 1);
+    ReverseString(s, m, n - 1);
+    ReverseString(s, 0, n -1);
 }
